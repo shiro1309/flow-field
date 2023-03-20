@@ -7,10 +7,10 @@ from taichi_glsl import vec2, vec3
 
 deg45 = math.sqrt(2)/2
 
-flow_list = [[[deg45,deg45],[0,1.0],[0,1.0],[-deg45,deg45]],
-             [[1.0,0],[deg45,deg45],[-deg45,deg45],[-1.0,0]],
-             [[1.0,0],[deg45,-deg45],[-deg45,-deg45],[-1.0,0]],
-             [[deg45,-deg45],[0,-1.0],[0,-1.0],[-deg45,-deg45]]]
+#flow_list = [[[deg45,deg45],[0,1.0],[0,1.0],[-deg45,deg45]],
+#             [[1.0,0],[deg45,deg45],[-deg45,deg45],[-1.0,0]],
+#             [[1.0,0],[deg45,-deg45],[-deg45,-deg45],[-1.0,0]],
+#             [[deg45,-deg45],[0,-1.0],[0,-1.0],[-deg45,-deg45]]]
 
 @ti.data_oriented
 class Shader:
