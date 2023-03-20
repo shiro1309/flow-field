@@ -18,9 +18,10 @@ class Shader:
         self.app = app
         
         self.screen_field = ti.Vector.field(3, ti.f32, (self.app.vector_width, self.app.vector_height))
-    
+        self.agent_field = ti.vector.field(2, ti.int16, (self.app.width, self.app.height))
+        
     @ti.kernel
-    def render(self):
+    def calc(self):
         for frag_coord in ti.grouped(self.screen_field):
             uv = frag_coord/self.app.vector_field.xy
             
@@ -60,26 +61,30 @@ class Shader:
         return c 
     
     def update(self):
-        self.render()
-        self.app.screen_array = self.screen_field.to_numpy()
+        self.calc()
+        #self.app.screen_array = self.screen_field.to_numpy()
 
     def draw(self):
         pg.surfarray.blit_array(self.app.display, self.app.screen_array)
 
     def run(self):
         self.update()
-        self.draw()
+        #self.draw()
 
 class App:
     def __init__(self):
         pg.init()
         ti.init(arch=ti.vulkan)
+        
         self.resolution = self.width, self.height = vec2(800, 800)
         self.vector_field = self.vector_width, self.vector_height = vec2(800, 800)
         
-        self.display = pg.Surface(self.vector_field)
         self.screen_array = np.full((self.vector_width,self.vector_height),0, np.float32)
+        self.agent_array = np.full((self.vector_width,self.vector_height,2),[0,0], np.uint16)
+        
         self.screen = pg.display.set_mode(self.resolution)
+        self.display = pg.Surface(self.vector_field)
+        
         self.clock = pg.time.Clock()
         self.shader = Shader(self)
         
@@ -89,7 +94,7 @@ class App:
             self.shader.run()
             #start[0] += flow_list[int(start[0]/100)][int(start[1]/100)][0]*1
             #start[1] += flow_list[int(start[0]/100)][int(start[1]/100)][1]*1*-1
-#
+
             #pg.draw.circle(self.screen, (255,0,0), (start[0],start[1]), 1)
 
             for event in pg.event.get():
@@ -97,8 +102,8 @@ class App:
                     pg.quit()
                     sys.exit()
 
-            surf = pg.transform.scale(self.display, self.resolution)
-            self.screen.blit(surf, (0,0))
+            #surf = pg.transform.scale(self.display, self.resolution)
+            #self.screen.blit(surf, (0,0))
             
             pg.display.set_caption(f'FPS: {self.clock.get_fps() :.2f}')
             self.clock.tick()
