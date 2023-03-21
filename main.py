@@ -5,6 +5,8 @@ import taichi as ti
 from taichi_glsl import vec2, vec3
 import random
 
+
+
 @ti.data_oriented
 class Shader:
     def __init__(self, app):
@@ -105,13 +107,16 @@ class App:
         
         self.resolution = self.width, self.height = vec2(800, 800)
         self.vector_field = self.vector_width, self.vector_height = vec2(800, 800)
-        self.agent_num = 1000
+        self.agent_num = 10000
         
         self.screen_array = np.full((self.vector_width,self.vector_height),0, np.float32)
         self.agent_array = np.full((self.vector_width,self.vector_height,2),[0,0], np.uint16)
         self.screen = pg.display.set_mode(self.resolution)
         
         self.clock = pg.time.Clock()
+        image = pg.image.load("loading.png").convert()
+        self.screen.blit(image,(0,0))
+        pg.display.flip()
         self.shader = Shader(self)
         
     def run(self):
