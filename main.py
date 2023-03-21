@@ -107,7 +107,7 @@ class App:
         
         self.resolution = self.width, self.height = vec2(800, 800)
         self.vector_field = self.vector_width, self.vector_height = vec2(800, 800)
-        self.agent_num = 10000
+        self.agent_num = 1000
         
         self.screen_array = np.full((self.vector_width,self.vector_height),0, np.float32)
         self.agent_array = np.full((self.vector_width,self.vector_height,2),[0,0], np.uint16)
