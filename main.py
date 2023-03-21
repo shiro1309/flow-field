@@ -20,7 +20,7 @@ class Shader:
             self.agents_field[i] = vec2(random.randint(1,799), random.randint(1,799))
         
     @ti.kernel
-    def calc(self, time: ti.float32):
+    def render(self, time: ti.float32):
         for frag_coord in ti.grouped(self.screen_field):
             uv = frag_coord/self.app.vector_field.xy
             
@@ -90,7 +90,7 @@ class Shader:
     
     def update(self):
         time = pg.time.get_ticks()* 1e-3
-        self.calc(time)
+        self.render(time)
         self.app.screen_array = self.agent_field.to_numpy()
 
     def draw(self):
