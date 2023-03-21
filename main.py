@@ -25,18 +25,21 @@ class Shader:
             uv = frag_coord/self.app.vector_field.xy
             
             uv.x = uv.x + time*0.1
-            uv.y = uv.y + time*0.5
+            uv.y = uv.y - time*0.1
             
             c = self.SmoothNoise64(uv)
             
+            if c < 0.1:
+                c += 0.2
+            
             col = c
             
-            self.screen_field[frag_coord.x, self.app.vector_field.y - frag_coord.y - 1] = col * 360
+            self.screen_field[frag_coord.x, self.app.vector_field.y - frag_coord.y - 1] = ti.math.floor(col * 360)
         for i in range(0, self.app.agent_num):
             self.agent_field[self.agents_field[i].x, self.agents_field[i].y] = vec3(255)
             
-            self.agents_field[i].x = self.agents_field[i].x+1*ti.math.sin(self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
-            self.agents_field[i].y = self.agents_field[i].y+1*ti.math.cos(self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
+            self.agents_field[i].x = self.agents_field[i].x+1*ti.math.sin(((2*ti.math.pi)/360)*self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
+            self.agents_field[i].y = self.agents_field[i].y+1*ti.math.cos(((2*ti.math.pi)/360)*self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
             if self.agents_field[i].x <= 0:
                 self.agents_field[i].x = 799
             if self.agents_field[i].x >= 800:
@@ -107,7 +110,7 @@ class App:
         
         self.resolution = self.width, self.height = vec2(800, 800)
         self.vector_field = self.vector_width, self.vector_height = vec2(800, 800)
-        self.agent_num = 1000
+        self.agent_num = 10000
         
         self.screen_array = np.full((self.vector_width,self.vector_height),0, np.float32)
         self.agent_array = np.full((self.vector_width,self.vector_height,2),[0,0], np.uint16)
