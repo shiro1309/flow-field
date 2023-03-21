@@ -29,17 +29,14 @@ class Shader:
             
             c = self.SmoothNoise64(uv)
             
-            if c < 0.1:
-                c += 0.2
-            
             col = c
             
-            self.screen_field[frag_coord.x, self.app.vector_field.y - frag_coord.y - 1] = ti.math.floor(col * 360)
+            self.screen_field[frag_coord.x, self.app.vector_field.y - frag_coord.y - 1] = (col * 359)
         for i in range(0, self.app.agent_num):
             self.agent_field[self.agents_field[i].x, self.agents_field[i].y] = vec3(255)
             
-            self.agents_field[i].x = self.agents_field[i].x+1*ti.math.sin(((2*ti.math.pi)/360)*self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
-            self.agents_field[i].y = self.agents_field[i].y+1*ti.math.cos(((2*ti.math.pi)/360)*self.screen_field[self.agents_field[i].x,self.agents_field[i].y])
+            self.agents_field[i].x = self.agents_field[i].x+1*ti.math.cos(((2*ti.math.pi)/360)*ti.math.floor(self.screen_field[self.agents_field[i].x,self.agents_field[i].y]))
+            self.agents_field[i].y = self.agents_field[i].y+1*ti.math.sin(((2*ti.math.pi)/360)*ti.math.floor(self.screen_field[self.agents_field[i].x,self.agents_field[i].y]*-1))
             if self.agents_field[i].x <= 0:
                 self.agents_field[i].x = 799
             if self.agents_field[i].x >= 800:
