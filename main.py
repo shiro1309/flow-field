@@ -18,7 +18,8 @@ class Shader:
         self.app = app
         
         self.screen_field = ti.Vector.field(3, ti.f32, (self.app.vector_width, self.app.vector_height))
-        self.agent_field = ti.vector.field(2, ti.int16, (self.app.width, self.app.height))
+        self.agent_field = ti.Vector.field(2, ti.int16, (self.app.width, self.app.height))
+        self.agents_field = ti.field(ti.int16, ())
         
     @ti.kernel
     def calc(self):
@@ -62,14 +63,14 @@ class Shader:
     
     def update(self):
         self.calc()
-        #self.app.screen_array = self.screen_field.to_numpy()
+        self.app.screen_array = self.screen_field.to_numpy()
 
     def draw(self):
         pg.surfarray.blit_array(self.app.display, self.app.screen_array)
 
     def run(self):
         self.update()
-        #self.draw()
+        self.draw()
 
 class App:
     def __init__(self):
@@ -77,7 +78,7 @@ class App:
         ti.init(arch=ti.vulkan)
         
         self.resolution = self.width, self.height = vec2(800, 800)
-        self.vector_field = self.vector_width, self.vector_height = vec2(800, 800)
+        self.vector_field = self.vector_width, self.vector_height = vec2(100, 100)
         
         self.screen_array = np.full((self.vector_width,self.vector_height),0, np.float32)
         self.agent_array = np.full((self.vector_width,self.vector_height,2),[0,0], np.uint16)

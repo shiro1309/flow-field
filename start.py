@@ -1,7 +1,7 @@
 import pygame as pg
 import sys
 import math
-import taichi as ti
+#import taichi as ti
 
 deg45 = math.sqrt(2)/2
 
