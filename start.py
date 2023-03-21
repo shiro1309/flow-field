@@ -37,5 +37,5 @@ while True:
             sys.exit()
             
     pg.display.set_caption(f'FPS: {clock.get_fps() :.2f}')
-    clock.tick()
+    clock.tick(60)
     pg.display.flip()
