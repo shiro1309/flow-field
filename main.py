@@ -88,26 +88,6 @@ class Shader:
         c = c / 2
         return c 
     
-    def translate(self, value, leftMin, leftMax, rightMin, rightMax):
-        # Figure out how 'wide' each range is
-        leftSpan = leftMax - leftMin
-        rightSpan = rightMax - rightMin
-
-        # Convert the left range into a 0-1 range (float)
-        valueScaled = (value - leftMin) / (leftSpan)
-
-        # Convert the 0-1 range into a value in the right range.
-        return rightMin + (valueScaled * rightSpan)
-    
-    
-    def hash(self, seed, max):
-        a = 1103515245
-        c = 12345
-        m = 2 ** 32
-        x = seed
-        x = (a * x + c) % m
-        return int(x % max)
-    
     def update(self):
         time = pg.time.get_ticks()* 1e-3
         self.render(time)
